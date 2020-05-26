@@ -1,79 +1,30 @@
-import 'package:flutter/material.dart';
-import 'model/post.dart';
+import 'dart:io';
 
-void main() => runApp(App());
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'demo/home_demo.dart';
+
+void main() {
+  runApp(App());
+  if (Platform.isAndroid) {
+    // 以下两行 设置android状态栏为透明的沉浸。写在组件渲染之后，是为了在渲染后进行set赋值，覆盖状态栏，写在渲染之前MaterialApp组件会覆盖掉这个值。
+    SystemUiOverlayStyle systemUiOverlayStyle =
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  }
+}
 
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Home(),
-        theme: ThemeData(primaryColor: Colors.yellow, fontFamily: 'KaiTi'));
-  }
-}
-
-class Home extends StatelessWidget {
-  Widget _listItemBuilder(BuildContext context, int index) {
-    return Container(
-      color: Colors.white,
-      margin: EdgeInsets.all(8.0),
-      child: Column(
-        children: <Widget>[
-          Image.network(
-            posts[index].imageUrl,
-          ),
-          SizedBox(
-            height: 16.0,
-          ),
-          Text(
-            posts[index].title,
-            style: Theme.of(context).textTheme.headline6,
-          ),
-          Text(
-            posts[index].author,
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          SizedBox(
-            height: 16.0,
-          )
-        ],
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: Colors.yellow,
+        highlightColor: Color.fromRGBO(255, 255, 255, 0.5),
+        splashColor: Colors.white70,
       ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          '资质',
-          style: TextStyle(
-            fontFamily: Theme.of(context).textTheme.toString(),
-          ),
-        ),
-        centerTitle: true,
-        elevation: 30.0,
-      ),
-      body: ListView.builder(
-          itemCount: posts.length, itemBuilder: _listItemBuilder),
-    );
-  }
-}
-
-class Hello extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'hello',
-        textDirection: TextDirection.ltr,
-        style: TextStyle(
-          fontSize: 40.0,
-          fontWeight: FontWeight.bold,
-          color: Colors.yellow,
-        ),
-      ),
+      home: HomeDemo(),
     );
   }
 }
